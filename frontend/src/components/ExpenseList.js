@@ -32,10 +32,18 @@ function ExpenseList({ expenses, onEdit, onDelete }) {
   }
 
   const formatAmount = (amount) =>
-    new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
+    new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(amount);
 
   const formatDate = (dateStr) =>
-    new Date(dateStr).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    new Date(dateStr).toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
 
   return (
     <div className="expense-list">
@@ -43,13 +51,17 @@ function ExpenseList({ expenses, onEdit, onDelete }) {
         <span>{expenses.length} expense{expenses.length !== 1 ? 's' : ''}</span>
       </div>
       {expenses.map(expense => (
-        <div key={expense.id} className="expense-card">
+        <div key={expense._id} className="expense-card">
           <div
             className="category-badge"
-            style={{ backgroundColor: CATEGORY_COLORS[expense.category] + '20', color: CATEGORY_COLORS[expense.category] }}
+            style={{
+              backgroundColor: CATEGORY_COLORS[expense.category] + '20',
+              color: CATEGORY_COLORS[expense.category]
+            }}
           >
             <span>{CATEGORY_ICONS[expense.category] || '📦'}</span>
           </div>
+
           <div className="expense-info">
             <div className="expense-title">{expense.title}</div>
             <div className="expense-meta">
@@ -61,11 +73,24 @@ function ExpenseList({ expenses, onEdit, onDelete }) {
               <div className="expense-description">{expense.description}</div>
             )}
           </div>
+
           <div className="expense-right">
             <div className="expense-amount">{formatAmount(expense.amount)}</div>
             <div className="expense-actions">
-              <button className="btn-edit" onClick={() => onEdit(expense)} title="Edit">✏️</button>
-              <button className="btn-delete" onClick={() => onDelete(expense.id)} title="Delete">🗑️</button>
+              <button
+                className="btn-edit"
+                onClick={() => onEdit(expense)}
+                title="Edit"
+              >
+                ✏️
+              </button>
+              <button
+                className="btn-delete"
+                onClick={() => onDelete(expense._id)}
+                title="Delete"
+              >
+                🗑️
+              </button>
             </div>
           </div>
         </div>
