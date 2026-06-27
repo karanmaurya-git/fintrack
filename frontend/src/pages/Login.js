@@ -14,7 +14,7 @@ function Login({ onLogin, onSwitchToSignup }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/login', {
+        const res = await fetch('https://fintrack-backend-3een.onrender.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)

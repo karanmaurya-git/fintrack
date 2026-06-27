@@ -22,7 +22,7 @@ function BudgetManager({ token }) {
   const fetchBudgets = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/budgets?month=${month}`, { headers: authHeaders() });
+     const res = await fetch(`https://fintrack-backend-3een.onrender.com/api/budgets?month=${month}`, { headers: authHeaders() });
       const data = await res.json();
       setBudgets(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -41,7 +41,7 @@ function BudgetManager({ token }) {
       return;
     }
     try {
-      const res = await fetch('/api/budgets', {
+     const res = await fetch('https://fintrack-backend-3een.onrender.com/api/budgets', {
         method: 'POST',
         headers: authHeaders(),
         body: JSON.stringify({ ...form, month })
@@ -58,7 +58,7 @@ function BudgetManager({ token }) {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`/api/budgets/${id}`, { method: 'DELETE', headers: authHeaders() });
+     await fetch(`https://fintrack-backend-3een.onrender.com/api/budgets/${id}`, { method: 'DELETE', headers: authHeaders() });
       fetchBudgets();
     } catch (err) {
       setError('Failed to delete budget');

@@ -31,7 +31,7 @@ function Dashboard({ token }) {
     const fetchAll = async () => {
       setLoading(true);
       try {
-        const res = await fetch('/api/expenses', { headers: authHeaders() });
+        const res = await fetch('https://fintrack-backend-3een.onrender.com/api/expenses', { headers: authHeaders() });
         const data = await res.json();
         setExpenses(data.expenses || []);
       } catch (err) {

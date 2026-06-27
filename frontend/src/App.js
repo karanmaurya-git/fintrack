@@ -8,7 +8,7 @@ import BudgetManager from './components/BudgetManager';
 import Dashboard from './components/Dashboard';
 import './App.css';
 
-const API = '/api/expenses';
+const API = 'https://fintrack-backend-3een.onrender.com/api/expenses';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('fintrack_token'));
