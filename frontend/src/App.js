@@ -23,6 +23,7 @@ function App() {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
 
   const handleLogin = (newToken, newUser) => {
     localStorage.setItem('fintrack_token', newToken);
@@ -82,13 +83,25 @@ function App() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this expense?')) return;
+  const handleDeleteClick = (id) => {
+    setDeleteConfirm(id);
+  };
+
+  const handleDeleteConfirm = async () => {
     try {
-      await fetch(`${API}/${id}`, { method: 'DELETE', headers: authHeaders() });
+      const res = await fetch(`${API}/${deleteConfirm}`, {
+        method: 'DELETE',
+        headers: authHeaders()
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setError(`Delete failed: ${data.message}`);
+        return;
+      }
+      setDeleteConfirm(null);
       fetchExpenses();
     } catch (err) {
-      setError('Failed to delete expense.');
+      setError('Delete failed: ' + err.message);
     }
   };
 
@@ -139,6 +152,34 @@ function App() {
           </div>
         )}
 
+        {/* Custom Delete Confirmation Modal */}
+        {deleteConfirm && (
+          <div className="modal-overlay">
+            <div className="modal" style={{padding: '28px', maxWidth: '360px', textAlign: 'center'}}>
+              <div style={{fontSize: '36px', marginBottom: '12px'}}>🗑️</div>
+              <h3 style={{marginBottom: '8px', color: '#0f172a'}}>Delete Expense?</h3>
+              <p style={{color: '#64748b', fontSize: '14px', marginBottom: '24px'}}>
+                This action cannot be undone.
+              </p>
+              <div style={{display: 'flex', gap: '12px'}}>
+                <button
+                  className="btn-cancel"
+                  style={{flex: 1, padding: '10px', borderRadius: '8px', border: 'none', background: '#f1f5f9', cursor: 'pointer', fontWeight: '600'}}
+                  onClick={() => setDeleteConfirm(null)}
+                >
+                  Cancel
+                </button>
+                <button
+                  style={{flex: 1, padding: '10px', borderRadius: '8px', border: 'none', background: '#ef4444', color: 'white', cursor: 'pointer', fontWeight: '600'}}
+                  onClick={handleDeleteConfirm}
+                >
+                  Yes, Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'expenses' && (
           <>
             <SummaryBar expenses={expenses} total={total} />
@@ -164,7 +205,7 @@ function App() {
               ))}
             </div>
             {loading ? <div className="loading">Loading expenses...</div> : (
-              <ExpenseList expenses={expenses} onEdit={handleEdit} onDelete={handleDelete} />
+              <ExpenseList expenses={expenses} onEdit={handleEdit} onDelete={handleDeleteClick} />
             )}
           </>
         )}
